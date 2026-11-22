@@ -1,0 +1,15 @@
+---
+import Entry from '../../components/Entry.astro';
+import { getResolved } from '../../lib/entries';
+
+export async function getStaticPaths() {
+  const entries = await getResolved('zh');
+  return entries.map((item) => ({
+    params: { slug: item.slug },
+    props: { item },
+  }));
+}
+
+const { item } = Astro.props;
+---
+<Entry item={item} locale="zh" />

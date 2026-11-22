@@ -1,0 +1,89 @@
+---
+import '../styles/global.css';
+import '@fontsource-variable/dm-sans';
+import '@fontsource-variable/jetbrains-mono';
+import '@fontsource-variable/source-serif-4';
+
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { ui, type Locale } from '../i18n';
+
+interface Props {
+  locale: Locale;
+  title?: string;
+  description?: string;
+  /** Extra stylesheet or script for the page. */
+  head?: string;
+}
+
+const { locale, title, description, head } = Astro.props;
+const t = ui[locale];
+
+const siteTitle = title ? `${title} · ${t.siteName}` : `${t.siteName} — ${t.siteTagline}`;
+const siteDescription =
+  description ??
+  (locale === 'zh'
+    ? '刘宇的个人站：macOS 监控工具 Vitals、每日摘要工具 Radar 的调研笔记与工程决策记录。'
+    : "Yu Liu's site: Vitals (a macOS monitor), Radar (a daily digest), and the research notes and engineering decisions behind them.");
+---
+
+<!doctype html>
+<html lang={locale} data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={siteDescription} />
+    <meta name="color-scheme" content="dark light" />
+    <title>{siteTitle}</title>
+
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={siteTitle} />
+    <meta property="og:description" content={siteDescription} />
+    <meta property="og:url" content={new URL(Astro.url.pathname, Astro.site)} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="alternate" hreflang="zh" href={new URL(Astro.url.pathname, Astro.site)} />
+    <link rel="alternate" hreflang="en" href={new URL(`/en${Astro.url.pathname === '/' ? '/' : Astro.url.pathname}`, Astro.site)} />
+    <link rel="alternate" hreflang="x-default" href={new URL(Astro.url.pathname, Astro.site)} />
+
+    <script is:inline>
+      // Resolve the theme before first paint so there is no flash.
+      (function () {
+        try {
+          var stored = localStorage.getItem('theme');
+          var resolved =
+            stored === 'light' || stored === 'dark'
+              ? stored
+              : stored === 'system'
+                ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+                : 'dark';
+          document.documentElement.dataset.theme = resolved;
+        } catch (e) {
+          document.documentElement.dataset.theme = 'dark';
+        }
+      })();
+    </script>
+
+    {head && <Fragment set:html={head} />}
+  </head>
+  <body data-pagefind-filter={`language:${locale}`}>
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-[var(--radius-btn)] focus:bg-btn focus:px-4 focus:py-2 focus:text-btn-fg"
+    >
+      {locale === 'zh' ? '跳到正文' : 'Skip to content'}
+    </a>
+
+    <Header locale={locale} />
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <Footer locale={locale} />
+  </body>
+</html>

@@ -1,0 +1,199 @@
+---
+import { ui, pathForLocale, type Locale } from '../i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = ui[locale];
+const path = Astro.url.pathname;
+
+const nav = [
+  { href: '/work/', label: t.nav.work },
+  { href: '/work/?kind=note', label: t.nav.notes },
+  { href: '/work/?kind=decision', label: t.nav.decisions },
+];
+
+const isActive = (href: string) => {
+  const [base, query] = href.split('?');
+  if (query) return path === base;
+  return path.startsWith(base);
+};
+---
+
+<header
+  class="sticky top-0 z-50 h-[62px] border-b border-line bg-bg/80 backdrop-blur-md supports-[backdrop-filter]:bg-bg/70"
+>
+  <div class="mx-auto flex h-full w-full max-w-6xl items-center gap-6 px-[18px] sm:px-11">
+    <a href={pathForLocale('/', locale)} class="group flex shrink-0 items-baseline gap-2">
+      <span
+        class="font-mono text-[15px] font-medium tracking-tight text-accent transition-colors group-hover:text-accent-hover"
+        >Dachui61</span
+      >
+      <span class="hidden text-[15px] text-fg-muted sm:inline">{t.siteName}</span>
+    </a>
+
+    <nav class="hidden items-center gap-1 sm:flex" aria-label={locale === 'zh' ? '主导航' : 'Primary'}>
+      {
+        nav.map((item) => (
+          <a
+            href={pathForLocale(item.href, locale)}
+            aria-current={isActive(item.href) ? 'page' : undefined}
+            class:list={[
+              'rounded-[var(--radius-btn)] px-3 py-1.5 text-[15px] transition-colors duration-200',
+              isActive(item.href) ? 'text-fg' : 'text-fg-muted hover:text-fg',
+            ]}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="ml-auto flex items-center gap-1">
+      <slot name="tools" />
+
+      <a
+        href={pathForLocale('/search/', locale)}
+        class="flex h-8 w-8 items-center justify-center rounded-[var(--radius-icon)] border border-line text-fg-label transition-colors duration-200 hover:text-fg"
+        aria-label={t.actions.search}
+      >
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <circle cx="11" cy="11" r="7"></circle>
+          <path d="m20 20-3.5-3.5"></path>
+        </svg>
+      </a>
+
+      <div
+        class="flex items-center overflow-hidden rounded-[var(--radius-btn)] border border-line"
+        role="group"
+        aria-label={t.lang.label}
+      >
+        {
+          (['zh', 'en'] as const).map((code) => (
+            <a
+              href={pathForLocale(path, code)}
+              lang={code}
+              hreflang={code}
+              aria-current={locale === code ? 'true' : undefined}
+              class:list={[
+                'px-2.5 py-1 font-mono text-[11px] font-medium uppercase tracking-[0.12em] transition-colors duration-200',
+                locale === code
+                  ? 'bg-accent text-accent-fg'
+                  : 'text-fg-label hover:text-fg',
+              ]}
+            >
+              {code}
+            </a>
+          ))
+        }
+      </div>
+
+      <button
+        type="button"
+        id="theme-toggle"
+        class="flex h-8 w-8 items-center justify-center rounded-[var(--radius-icon)] border border-line text-fg-label transition-colors duration-200 hover:text-fg"
+        aria-label={t.theme.label}
+        aria-live="polite"
+      >
+        <svg
+          class="hidden dark:block"
+          width="15"
+          height="15"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+        </svg>
+        <svg
+          class="block dark:hidden"
+          width="15"
+          height="15"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"
+          ></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<script is:inline>
+  (function () {
+    var btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    var order = ['dark', 'light', 'system'];
+    var labels = {
+      dark: document.documentElement.lang === 'zh' ? '主题：深色' : 'Theme: dark',
+      light: document.documentElement.lang === 'zh' ? '主题：浅色' : 'Theme: light',
+      system: document.documentElement.lang === 'zh' ? '主题：跟随系统' : 'Theme: follow system',
+    };
+    var icons = {
+      dark: '<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>',
+      light:
+        '<circle cx="12" cy="12" r="4"></circle><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>',
+      system:
+        '<rect x="2" y="3" width="20" height="14" rx="2"></rect><path d="M8 21h8m-4-4v4"></path>',
+    };
+
+    function current() {
+      var stored = null;
+      try {
+        stored = localStorage.getItem('theme');
+      } catch (e) {}
+      if (stored === 'light' || stored === 'dark' || stored === 'system') return stored;
+      return 'dark';
+    }
+
+    function resolved(mode) {
+      if (mode === 'system') {
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      return mode;
+    }
+
+    function render() {
+      var mode = current();
+      document.documentElement.dataset.theme = resolved(mode);
+      btn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">' +
+        icons[mode] + '</svg>';
+      btn.setAttribute('aria-label', labels[mode]);
+    }
+
+    btn.addEventListener('click', function () {
+      var mode = current();
+      var next = order[(order.indexOf(mode) + 1) % order.length];
+      try {
+        localStorage.setItem('theme', next);
+      } catch (e) {}
+      render();
+    });
+
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () {
+      if (current() === 'system') render();
+    });
+
+    render();
+  })();
+</script>

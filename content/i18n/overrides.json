@@ -1,0 +1,50 @@
+{
+  "notes": {
+    "oss-hotlist-aggregation-landscape": {
+      "titleEn": "Surveying Open Source Hot-List Aggregators: What You Can Reuse, What You Can Only Borrow",
+      "summary": "把所有值得知道的中文热榜聚合开源件逐个读到源码级：各自暴露什么、哪些需要 cookie 或签名、许可证的边界在哪。结论是——没有一个能直接当来源层。",
+      "summaryEn": "A source-level audit of every Chinese hot-list aggregator worth knowing — what each one actually exposes, which need cookies or signatures, and where the licence rules cut. Conclusion: none of them can be a source layer as-is.",
+      "date": "2026-11-17"
+    },
+    "data-source-feasibility-and-compliance": {
+      "titleEn": "Data Source Feasibility and Compliance",
+      "summary": "哪些平台能用公开接口或 RSS 免凭据读到、哪些必须主动放弃，以及「读公开订阅源」和「爬带签名的接口」之间的线到底画在哪。",
+      "summaryEn": "What can be read from public endpoints and RSS without a credential, which platform has to be written off, and where the line between reading a public feed and scraping a signed API actually sits."
+    },
+    "diversity-ranking-and-ad-filtering-algorithms": {
+      "titleEn": "Diversity Ranking and Soft-Promotion Detection",
+      "summary": "打破信息茧房的那套算法：跨源事件簇、来源与主题的配额硬上限，以及逐条判定的推广档位——证据不足的条目绝不隐藏。",
+      "summaryEn": "The algorithms behind breaking an information cocoon: cross-source clustering, source and topic quotas as a hard ceiling, and per-item promotion bands that never hide an uncertain item."
+    },
+    "electron-python-sidecar-integration": {
+      "titleEn": "An Electron Shell with a Python Sidecar: How It Is Actually Done in 2026",
+      "summary": "进程边界、IPC 契约、打包，以及只有在装到机器上之后才会暴露的坑。全部读真实实现，不读博客。",
+      "summaryEn": "Process boundaries, IPC contracts, packaging and the failure modes that only show up after the app is installed — read from real implementations rather than blog posts."
+    },
+    "metric-backends": {
+      "titleEn": "Collection Backends for Each Metric, and What They Actually Cost",
+      "summary": "监控里的每个指标对应哪个无特权后端能读到，实测读延迟多少，后端消失时降级链该怎么走。",
+      "summaryEn": "Every metric in the monitor mapped to the backend that can read it without privileges, with measured read latency and the degradation chain when a backend disappears."
+    }
+  },
+  "decisions": {
+    "temperature-backend-and-degradation": {
+      "titleEn": "Temperature Backend and Its Fallback Chain",
+      "summary": "macOS 27 没有公开的 CPU 温度 API，数值只能从一个私有 dylib 读——所以必须标近似值。降级链的终点是「不可用」，绝不是编一个数字出来。",
+      "summaryEn": "macOS 27 exposes no public CPU temperature API, so the reading comes from a private dylib — and must therefore be labelled approximate. The fallback chain ends in 'unavailable', never in a fabricated number.",
+      "date": "2026-11-14"
+    },
+    "why-no-privileged-component": {
+      "titleEn": "Why No Privileged Component",
+      "summary": "安装永远不问管理员密码，于是每个指标都得自己找到无特权的路。这条决定否掉的方案比它开启的多。",
+      "summaryEn": "Installing must never ask for an administrator password, so every metric has to find a path that needs no privileges. This decision rules out more than it enables.",
+      "date": "2026-11-14"
+    },
+    "private-apis-and-degradation": {
+      "titleEn": "Private APIs, and How to Degrade",
+      "summary": "哪些私有接口可以用、需要什么探测与缓存，以及符号消失时必须降级而不是崩掉。",
+      "summaryEn": "Which private interfaces are acceptable, what probing and caching they require, and the rule that a missing symbol must produce a stated degradation rather than a crash.",
+      "date": "2026-11-14"
+    }
+  }
+}

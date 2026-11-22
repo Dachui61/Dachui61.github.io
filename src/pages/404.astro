@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import { pathForLocale, ui } from '../i18n';
+
+const locale = 'zh';
+const t = ui[locale];
+---
+
+<Base locale={locale} title="404">
+  <section class="mx-auto w-full max-w-6xl px-[18px] sm:px-11">
+    <div class="py-24 sm:py-32">
+      <p class="label">404</p>
+      <h1 class="mt-4 text-[2.2rem] leading-tight font-semibold tracking-[-0.038em] sm:text-[3rem]">
+        这一页不存在。
+      </h1>
+      <p class="mt-4 max-w-[48ch] text-[17px] leading-relaxed text-fg-muted">
+        和我的工具一样：找不到就说找不到，不给你猜一个假的。
+      </p>
+      <div class="mt-8">
+        <a
+          href={pathForLocale('/work/', locale)}
+          class="inline-block rounded-[var(--radius-btn)] bg-btn px-5 py-2.5 text-[15px] font-medium text-btn-fg transition-colors duration-200 hover:bg-btn-hover"
+        >
+          {t.actions.browseWork}
+        </a>
+      </div>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,237 @@
+---
+import Base from '../layouts/Base.astro';
+import EntryCard from './EntryCard.astro';
+import { pathForLocale, ui, type Locale } from '../i18n';
+import { getResolved, byGroup } from '../lib/entries';
+import { toolchain, toolchainTotal } from '../lib/toolchain';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = ui[locale];
+
+const entries = await getResolved(locale);
+const buckets = byGroup(entries);
+
+const copy = {
+  zh: {
+    eyebrow: '刘宇 · Dachui61',
+    h1: '读数要可信，取不到要说取不到。',
+    sub: '我做自用的 macOS 工具，也把每个决定、每次查证写下来——包括哪条路被否掉了，为什么。',
+    essayTitle: '工具的价值，取决于它坏掉的时候告诉你什么。',
+    essay: [
+      '大部分工具只在顺利的时候被评价。一个进度条走到 100%、一条曲线画得很顺——这些是顺利时的截图。真正决定一个工具能不能被信任的，是它出问题时的那一行字：这个数读到了吗？没读到的话，是没有权限、没配置，还是这个来源根本不提供？',
+      '所以我给自己的项目定了三条不成文的规矩。第一，读不到就是读不到——降级链的终点是「不可用（原因）」，不显示 0，不用别的指标反推。第二，界面上永远写着读数的来源和可信度：核心温度是 57 度，还是降级出来的热压力等级、是不是近似值，用户一眼就能看出来。第三，「我这里没有数据」和「这里是 0」是两种完全不同的状态，用的词也不一样。',
+      '这个站上大部分东西是我做给自己用的。Vitals 是常驻在这台 Mac mini 上的监控面板，Radar 是还没写完的每日摘要工具。除此之外是五篇调研笔记和三份决策记录——后者记的全是「哪条路被否掉了、为什么」。如果你在找那种一次做对、永远不出错的东西，这里没有；如果你感兴趣的是「一个工具怎么诚实地承认自己做不到什么」，这里可能挺有意思。',
+    ],
+    aboutTitle: '关于我',
+    about: [
+      '我是刘宇，GitHub 上叫 Dachui61。大部分代码在我这台 Mac mini 上跑。',
+      '我写 Swift 和 Electron，做的都是自用工具——不是给别人用的产品，是我自己每天离不开的东西。',
+      '做决定之前先查证，结论回到一手来源：仓库主页、仓库里的 README 和 LICENSE、官方文档页。只到搜索结果页级别的判断我会明确标注，取不到的字段写「未取到」，不猜。',
+    ],
+    contact: '联系',
+    github: 'GitHub',
+    counters: [
+      { value: '26', label: '张票结清' },
+      { value: '5', label: '篇调研笔记' },
+      { value: '3', label: '份决策记录' },
+    ],
+  },
+  en: {
+    eyebrow: 'Yu Liu · Dachui61',
+    h1: 'A reading you can trust, or an honest "not available".',
+    sub: 'I build macOS tools for my own use, and I write down every decision and every check — including which paths were rejected, and why.',
+    essayTitle: 'What a tool is worth depends on what it tells you when it breaks.',
+    essay: [
+      'Most tools only get judged when they are working. A progress bar at 100%, a smooth curve — those are screenshots of a good day. What decides whether a tool can be trusted is the line it prints when something goes wrong: did the number arrive? And if not, was that a missing permission, a missing setting, or a source that simply does not expose the data?',
+      'So I gave my own projects three unwritten rules. First, not-read is not-read: the fallback chain ends at "unavailable, and here is why" — never a zero, never another metric back-solved into a number. Second, the interface always says where a reading came from and how much to trust it: is core temperature a 57 degrees, or a degraded thermal-pressure level, or an approximation? The user should be able to tell at a glance. Third, "there is no data here" and "this is zero" are different states, and they get different words.',
+      'Most of what is on this site is something I built for myself. Vitals is a monitor that lives on this Mac mini; Radar is a daily digest that is not finished yet. Alongside them are five research notes and three decision records — the latter exist only to record which paths were rejected and why. If you are looking for something built right the first time and never wrong, that is not here. If you are interested in how a tool honestly admits what it cannot do, this might be.',
+    ],
+    aboutTitle: 'About me',
+    about: [
+      'I am Yu Liu, known as Dachui61 on GitHub. Most of the code runs on this Mac mini.',
+      'I write Swift and Electron, and everything I build is for my own use — not a product for someone else, but something I need every day.',
+      'I verify before deciding, and every conclusion goes back to a primary source: the repository page, the README and LICENSE inside it, the official documentation. Judgements that only reach search-result level are labelled as such, and fields I could not fetch are written as "not fetched" rather than guessed.',
+    ],
+    contact: 'Contact',
+    github: 'GitHub',
+    counters: [
+      { value: '26', label: 'tickets closed' },
+      { value: '5', label: 'research notes' },
+      { value: '3', label: 'decision records' },
+    ],
+  },
+}[locale];
+---
+
+<Base locale={locale} title={t.siteTagline}>
+  <section class="mx-auto w-full max-w-6xl px-[18px] sm:px-11">
+    <div class="py-16 sm:py-24 lg:py-32">
+      <p class="label">{copy.eyebrow}</p>
+
+      <h1
+        class={`mt-5 ${locale === 'zh' ? 'max-w-[16em] text-[2.6rem] sm:text-[3.4rem] lg:text-[4.1rem]' : 'max-w-[20ch] text-[2.4rem] sm:text-[3rem] lg:text-[3.5rem]'} leading-[1.02] font-semibold tracking-[-0.042em]`}
+      >
+        {copy.h1}
+      </h1>
+
+      <p
+        class={`mt-6 ${locale === 'zh' ? 'max-w-[42em]' : 'max-w-[58ch]'} text-[17px] leading-relaxed text-fg-muted lg:text-[21px]`}
+      >
+        {copy.sub}
+      </p>
+
+      <div class="mt-9 flex flex-wrap items-center gap-3">
+        <a
+          href={pathForLocale('/work/', locale)}
+          class="rounded-[var(--radius-btn)] bg-btn px-5 py-2.5 text-[15px] font-medium text-btn-fg transition-colors duration-200 hover:bg-btn-hover"
+        >
+          {t.actions.browseWork}
+        </a>
+        <a
+          href={pathForLocale('/work/oss-hotlist-aggregation-landscape/', locale)}
+          class="rounded-[var(--radius-btn)] border border-line px-5 py-2.5 text-[15px] font-medium text-fg transition-colors duration-200 hover:border-line-strong hover:bg-card"
+        >
+          {t.actions.readNotes}
+        </a>
+      </div>
+
+      <dl class="mt-14 grid max-w-[640px] grid-cols-3 gap-6 border-t border-line pt-8">
+        {
+          copy.counters.map((counter) => (
+            <div>
+              <dt class="label">{counter.label}</dt>
+              <dd class="mt-1.5 font-mono text-[26px] leading-none tracking-tight text-fg">
+                {counter.value}
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  <section class="border-t border-line bg-band">
+    <div class="mx-auto w-full max-w-6xl px-[18px] sm:px-11">
+      <div class="py-16 sm:py-20">
+        <h2
+          class="max-w-[24ch] text-[1.9rem] leading-[1.12] font-semibold tracking-[-0.032em] sm:text-[2.6rem]"
+        >
+          {copy.essayTitle}
+        </h2>
+        <div
+          class={`mt-8 ${locale === 'zh' ? 'max-w-[42em]' : 'max-w-[64ch]'} space-y-5 text-[17px] leading-relaxed text-fg-muted lg:text-[19px]`}
+        >
+          {copy.essay.map((p) => <p>{p}</p>)}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {
+    buckets.map(({ group, items }) => (
+      <section class="border-t border-line">
+        <div class="mx-auto w-full max-w-6xl px-[18px] sm:px-11">
+          <div class="py-14 sm:py-16">
+            <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+              <span class="label text-accent">{group.num}</span>
+              <h2 class="text-[1.7rem] leading-tight font-semibold tracking-[-0.028em] sm:text-[2.2rem]">
+                {locale === 'zh' ? group.titleZh : group.titleEn}
+              </h2>
+            </div>
+            <p class="mt-2 max-w-[52ch] text-[16px] text-fg-muted">
+              {locale === 'zh' ? group.taglineZh : group.taglineEn}
+            </p>
+
+            <div class="mt-8">
+              {items.map((item) => (
+                <EntryCard item={item} locale={locale} />
+              ))}
+            </div>
+
+            <a
+              href={pathForLocale('/work/', locale)}
+              class="group mt-6 inline-flex items-center gap-1.5 text-[15px] text-fg-muted transition-colors duration-200 hover:text-fg"
+            >
+              {t.home.allNotes}
+              <span
+                class="inline-block transition-transform duration-300 group-hover:translate-x-1"
+                aria-hidden="true"
+                >→</span
+              >
+            </a>
+          </div>
+        </div>
+      </section>
+    ))
+  }
+
+  <section class="border-t border-line bg-band">
+    <div class="mx-auto w-full max-w-6xl px-[18px] sm:px-11">
+      <div class="py-14 sm:py-16">
+        <h2 class="text-[1.7rem] leading-tight font-semibold tracking-[-0.028em] sm:text-[2.2rem]">
+          {t.home.toolchain}
+        </h2>
+        <p class="mt-2 max-w-[58ch] text-[16px] text-fg-muted">{t.home.toolchainNote}</p>
+
+        <div class="mt-8 grid gap-px overflow-hidden rounded-[var(--radius-card)] border border-line bg-line sm:grid-cols-2">
+          {
+            toolchain.map((source) => (
+              <div class="bg-band p-5">
+                <div class="flex items-baseline justify-between gap-4">
+                  <a
+                    href={source.url}
+                    rel="noopener"
+                    class="font-mono text-[13px] font-medium text-fg transition-colors duration-200 hover:text-accent"
+                  >
+                    {source.name}
+                  </a>
+                  <span class="label">{source.count}</span>
+                </div>
+                <p class="mt-1.5 text-[14px] text-fg-subtle">
+                  {source.author} · {source.license}
+                </p>
+                <p class="mt-3 font-mono text-[12px] leading-relaxed text-fg-muted">
+                  {source.picks.join(' · ')}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+
+        <p class="mt-4 font-mono text-[12px] text-fg-subtle">
+          {toolchainTotal} skills · {locale === 'zh' ? '全部来自第三方' : 'all third-party'}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-t border-line">
+    <div class="mx-auto w-full max-w-6xl px-[18px] sm:px-11">
+      <div class="py-14 sm:py-16">
+        <div class="grid gap-10 lg:grid-cols-[1fr_1.2fr] lg:gap-16">
+          <div>
+            <h2 class="text-[1.7rem] leading-tight font-semibold tracking-[-0.028em] sm:text-[2.2rem]">
+              {copy.aboutTitle}
+            </h2>
+            <div class="mt-5 flex flex-wrap items-center gap-3">
+              <a
+                href="https://github.com/Dachui61"
+                rel="noopener me"
+                class="rounded-[var(--radius-btn)] border border-line px-4 py-2 text-[15px] text-fg transition-colors duration-200 hover:border-line-strong hover:bg-card"
+              >
+                {copy.github} ↗
+              </a>
+            </div>
+          </div>
+
+          <div class="space-y-5 text-[16px] leading-relaxed text-fg-muted lg:text-[18px]">
+            {copy.about.map((p) => <p>{p}</p>)}
+          </div>        </div>
+      </div>
+    </div>
+  </section>
+</Base>

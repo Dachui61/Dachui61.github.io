@@ -1,0 +1,365 @@
+@import 'tailwindcss';
+
+/* Dark is the default theme. Light is opt-in via [data-theme='light']. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---------------------------------------------------------------------------
+   Design tokens.
+
+   The system is built on: hairline rules between every block, one accent
+   colour used sparingly, a monospace face that carries all structural
+   labelling, and a serif reserved exclusively for pull-quotes.
+   --------------------------------------------------------------------------- */
+
+:root,
+.dark {
+  color-scheme: dark;
+
+  --bg: #0b0b0b;
+  --bg-band: #0e0e0d;
+  --fg: #f4f3f1;
+  --fg-muted: #a3a19c;
+  --fg-subtle: #7b7a75;
+  --fg-label: #8e8d88;
+  --card: #100f0e;
+  --card-hover: #171614;
+  --border: #ffffff14;
+  --border-strong: #ffffff26;
+  --border-soft: #ffffff0a;
+
+  --accent: #f5c451;
+  --accent-hover: #eab534;
+  --accent-fg: #191510;
+  --accent-panel: #1d1a11;
+  --accent-line: #f5c45140;
+
+  --btn-bg: #f5c451;
+  --btn-bg-hover: #eab534;
+  --btn-fg: #191510;
+
+  --mark-yes: #7fc98a;
+  --mark-no: #d2483a;
+  --mark-gold: #f5c451;
+}
+
+[data-theme='light'] {
+  color-scheme: light;
+
+  --bg: #fbfbfc;
+  --bg-band: #f1f2f5;
+  --fg: #14161a;
+  --fg-muted: #55595f;
+  --fg-subtle: #7b8087;
+  --fg-label: #6b7078;
+  --card: #ffffff;
+  --card-hover: #fbfbfc;
+  --border: #14161a1a;
+  --border-strong: #14161a33;
+  --border-soft: #14161a0a;
+
+  --accent: #b8860b;
+  --accent-hover: #9a7209;
+  --accent-fg: #fffdf5;
+  --accent-panel: #fdf6e3;
+  --accent-line: #b8860b40;
+
+  --btn-bg: #14161a;
+  --btn-bg-hover: #2b2e33;
+  --btn-fg: #fbfbfc;
+
+  --mark-yes: #2e7d43;
+  --mark-no: #c0392b;
+  --mark-gold: #b8860b;
+}
+
+/* `inline` keeps the generated utilities pointing at the live custom property,
+   so a theme switch is a cascade change with no rebuild. */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-band: var(--bg-band);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-subtle: var(--fg-subtle);
+  --color-fg-label: var(--fg-label);
+  --color-card: var(--card);
+  --color-card-hover: var(--card-hover);
+  --color-line: var(--border);
+  --color-line-strong: var(--border-strong);
+  --color-line-soft: var(--border-soft);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-fg: var(--accent-fg);
+  --color-accent-panel: var(--accent-panel);
+  --color-accent-line: var(--accent-line);
+  --color-btn: var(--btn-bg);
+  --color-btn-hover: var(--btn-bg-hover);
+  --color-btn-fg: var(--btn-fg);
+
+  --font-sans: 'DM Sans Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, 'SF Mono', Menlo, monospace;
+  --font-serif: 'Source Serif 4 Variable', ui-serif, Georgia, 'Times New Roman', serif;
+
+  --radius-btn: 9px;
+  --radius-card: 10px;
+  --radius-code: 4px;
+  --radius-badge: 4px;
+  --radius-icon: 7px;
+
+  --ease-out-quart: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---------------------------------------------------------------------------
+   Base
+   --------------------------------------------------------------------------- */
+
+html {
+  scrollbar-gutter: stable;
+  background: var(--bg);
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+@media (min-width: 1024px) {
+  body {
+    font-size: 21px;
+  }
+}
+
+h1,
+h2,
+h3,
+h4 {
+  text-wrap: balance;
+  letter-spacing: -0.028em;
+  font-weight: 600;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-fg);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+/* ---------------------------------------------------------------------------
+   Structural label — the monospace face carries every eyebrow, counter and
+   group number on the site.
+   --------------------------------------------------------------------------- */
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg-label);
+}
+
+/* ---------------------------------------------------------------------------
+   Hairline rules — every top-level block is separated by a 1px line.
+   --------------------------------------------------------------------------- */
+
+.rule > * + * {
+  border-top: 1px solid var(--border);
+}
+
+.grid-hairline {
+  display: grid;
+  gap: 1px;
+  background: var(--border);
+}
+
+.grid-hairline > * {
+  background: var(--bg);
+}
+
+/* ---------------------------------------------------------------------------
+   Prose — long-form documents (research notes, decision records).
+   --------------------------------------------------------------------------- */
+
+.prose {
+  font-size: 15.5px;
+  line-height: 1.68;
+  color: var(--fg-muted);
+}
+
+.prose > * + * {
+  margin-top: 1.15em;
+}
+
+.prose h2 {
+  font-size: 1.55rem;
+  line-height: 1.25;
+  color: var(--fg);
+  margin-top: 2.4em;
+  scroll-margin-top: 6rem;
+}
+
+.prose h3 {
+  font-size: 1.15rem;
+  line-height: 1.3;
+  color: var(--fg);
+  margin-top: 1.9em;
+  scroll-margin-top: 6rem;
+}
+
+.prose a {
+  color: var(--fg);
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-underline-offset: 3px;
+}
+
+.prose a:hover {
+  text-decoration-color: var(--fg);
+}
+
+.prose strong {
+  color: var(--fg);
+  font-weight: 600;
+}
+
+.prose ul,
+.prose ol {
+  padding-left: 1.35em;
+}
+
+.prose li + li {
+  margin-top: 0.35em;
+}
+
+.prose ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.prose ul > li {
+  position: relative;
+  padding-left: 1.35em;
+}
+
+.prose ul > li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 5px;
+  height: 5px;
+  border-radius: 1px;
+  background: var(--accent);
+}
+
+.prose ol {
+  list-style: decimal;
+}
+
+.prose ol > li::marker {
+  color: var(--fg-label);
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+}
+
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+  background: var(--card);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-code);
+  padding: 0.12em 0.35em;
+  color: var(--fg);
+}
+
+.prose pre {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: 1rem 1.15rem;
+  overflow-x: auto;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.prose pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: inherit;
+}
+
+.prose blockquote {
+  border-left: 2px solid var(--accent);
+  font-family: var(--font-serif);
+  font-size: 1.28rem;
+  line-height: 1.45;
+  color: var(--fg);
+  margin: 2em 0;
+  padding: 2px 0 2px 1.4rem;
+}
+
+.prose hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 2.5em 0;
+}
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.86em;
+  display: block;
+  overflow-x: auto;
+}
+
+.prose thead th {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg-label);
+  text-align: left;
+  padding: 0.6em 0.85em;
+  border-bottom: 1px solid var(--border-strong);
+  white-space: nowrap;
+}
+
+.prose tbody td {
+  padding: 0.7em 0.85em;
+  border-bottom: 1px solid var(--border-soft);
+  vertical-align: top;
+}
+
+.prose tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ---------------------------------------------------------------------------
+   Motion
+   --------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

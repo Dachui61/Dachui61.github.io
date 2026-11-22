@@ -1,0 +1,66 @@
+---
+import { pathForLocale, ui, type Locale } from '../i18n';
+import type { Resolved } from '../lib/entries';
+
+interface Props {
+  item: Resolved;
+  locale: Locale;
+  /** Show the entry's own body excerpt instead of the summary. */
+  compact?: boolean;
+}
+
+const { item, locale, compact = false } = Astro.props;
+const t = ui[locale];
+
+const kindLabel = {
+  project: { zh: '项目', en: 'Project' },
+  note: { zh: '调研笔记', en: 'Research note' },
+  decision: { zh: '决策记录', en: 'Decision' },
+}[item.kind];
+
+const kindLabelText = locale === 'zh' ? kindLabel.zh : kindLabel.en;
+
+const dateText = item.date
+  ? new Intl.DateTimeFormat(locale === 'zh' ? 'zh-CN' : 'en-GB', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      timeZone: 'Asia/Shanghai',
+    }).format(item.date)
+  : null;
+---
+
+<a
+  href={pathForLocale(`/work/${item.slug}/`, locale)}
+  class="group flex flex-col gap-2 border-t border-line py-5 transition-colors duration-200 hover:bg-card"
+>
+  <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+    <span class="label">{kindLabelText}</span>
+    {dateText && <span class="label text-fg-subtle">{dateText}</span>}
+    {item.status && <span class="label text-fg-subtle">· {item.status}</span>}
+  </div>
+
+  <h3
+    class="text-[1.15rem] leading-snug font-semibold tracking-[-0.02em] transition-colors duration-200 group-hover:text-accent"
+  >
+    {item.title}
+  </h3>
+
+  {!compact && item.summary && (
+    <p class="line-clamp-3 max-w-[62ch] text-[15px] leading-relaxed text-fg-muted">
+      {item.summary}
+    </p>
+  )}
+
+  {item.tech.length > 0 && (
+    <ul class="mt-1 flex flex-wrap gap-1.5">
+      {
+        item.tech.map((tech) => (
+          <li class="rounded-[var(--radius-badge)] border border-line px-1.5 py-0.5 font-mono text-[10.5px] text-fg-subtle">
+            {tech}
+          </li>
+        ))
+      }
+    </ul>
+  )}
+</a>

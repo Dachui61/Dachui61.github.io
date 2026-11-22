@@ -1,0 +1,93 @@
+---
+import { pathForLocale, ui, type Locale } from '../i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = ui[locale];
+
+const columns = [
+  {
+    heading: t.nav.work,
+    links: [
+      { label: 'Vitals', href: '/work/vitals/' },
+      { label: 'Radar', href: '/work/radar/' },
+    ],
+  },
+  {
+    heading: t.nav.notes,
+    links: [
+      { label: 'OSS 热榜聚合盘点', href: '/work/oss-hotlist-aggregation-landscape/' },
+      { label: '数据源可行性与合规', href: '/work/data-source-feasibility-and-compliance/' },
+      { label: '多样性与推广识别', href: '/work/diversity-ranking-and-ad-filtering-algorithms/' },
+      { label: 'Electron + Python sidecar', href: '/work/electron-python-sidecar-integration/' },
+      { label: '指标采集后端', href: '/work/metric-backends/' },
+    ],
+  },
+  {
+    heading: t.nav.decisions,
+    links: [
+      { label: '温度后端与降级策略', href: '/work/temperature-backend-and-degradation/' },
+      { label: '为何不引入特权组件', href: '/work/why-no-privileged-component/' },
+      { label: '私有接口的使用与降级', href: '/work/private-apis-and-degradation/' },
+    ],
+  },
+];
+---
+
+<footer class="mt-24 border-t border-line">
+  <div class="mx-auto w-full max-w-6xl px-[18px] sm:px-11">
+    <div class="grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-4">
+      <div class="lg:col-span-1">
+        <p class="font-mono text-[15px] font-medium text-accent">Dachui61</p>
+        <p class="mt-1 text-[15px] text-fg-muted">{t.siteName}</p>
+        <p class="mt-4 max-w-[34ch] text-[14px] leading-relaxed text-fg-subtle">{t.siteTagline}</p>
+      </div>
+
+      {
+        columns.map((col) => (
+          <nav aria-label={col.heading}>
+            <h2 class="label">{col.heading}</h2>
+            <ul class="mt-4 space-y-2.5">
+              {col.links.map((link) => (
+                <li>
+                  <a
+                    href={pathForLocale(link.href, locale)}
+                    class="text-[15px] text-fg-muted transition-colors duration-200 hover:text-fg"
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ))
+      }
+    </div>
+
+    <div
+      class="flex flex-col gap-3 border-t border-line py-6 text-[13px] text-fg-subtle sm:flex-row sm:items-center sm:justify-between"
+    >
+      <p>{t.footer.builtWith}</p>
+      <div class="flex flex-wrap items-center gap-x-5 gap-y-2">
+        <a
+          href="https://github.com/Dachui61/Dachui61.github.io"
+          class="transition-colors duration-200 hover:text-fg"
+          rel="noopener"
+        >
+          {t.footer.sourceOn} ↗
+        </a>
+        <a
+          href="https://github.com/Dachui61"
+          class="transition-colors duration-200 hover:text-fg"
+          rel="noopener me"
+        >
+          GitHub ↗
+        </a>
+        <a href="/llms.txt" class="transition-colors duration-200 hover:text-fg">llms.txt</a>
+      </div>
+    </div>
+  </div>
+</footer>
