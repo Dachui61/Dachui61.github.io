@@ -44,6 +44,34 @@ being read in English. It states a fact about the content; it does not
 apologise.
 _Avoid_: 暂无英文版, 翻译中
 
+**简历** (résumé):
+A self-description and a selection of work, written for a hiring manager.
+Its content lives in `content/profile/resume.yaml`. The featured projects
+and writing on it come from the catalogue itself, so the résumé and the
+catalogue cannot disagree.
+_Avoid_: 个人主页, 履历, 简历页
+
+**经历** (experience):
+One job on the résumé: a period, a role, an organisation. It is **not** an
+entry in the catalogue — a job happened outside the repository and has no
+artefact behind it.
+_Avoid_: 项目, 条目, 作品, 经历条目
+
+**精选** (featured):
+A catalogue entry marked `featured: true`. The résumé draws its selected
+projects and selected writing from this flag and from nowhere else.
+_Avoid_: 推荐, 热门, 精选推荐
+
+**技术能力** (skill):
+One capability on the résumé, with a sentence of explanation and an
+optional **证据** — a link to the catalogue entry that proves it.
+_Avoid_: 技能栈, 工具, 技术标签
+
+**证据** (proof):
+The link from a skill to the entry that demonstrates it. "I can prove this"
+is stronger than "I know this".
+_Avoid_: 例子, 演示, 样例, 链接
+
 ## Borrowed from Vitals
 
 **核心温度** (core temperature):

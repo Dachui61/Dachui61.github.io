@@ -8,6 +8,9 @@ summary: "把所有值得知道的中文热榜聚合开源件逐个读到源码�
 summaryEn: "A source-level audit of every Chinese hot-list aggregator worth knowing — what each one actually exposes, which need cookies or signatures, and where the licence rules cut. Conclusion: none of them can be a source layer as-is."
 group: "verify"
 order: 0
+featured: true
+resumeLine: 把所有值得知道的中文热榜聚合开源件逐个读到源码级，连许可证边界一起查清。
+resumeLineEn: A source-level audit of every Chinese hot-list aggregator worth knowing, licence rules included.
 date: "2026-11-17"
 hasBody: true
 ---

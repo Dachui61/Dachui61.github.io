@@ -1,0 +1,271 @@
+---
+import Base from '../layouts/Base.astro';
+import { pathForLocale, ui, type Locale } from '../i18n';
+import { getResume, resumeLine } from '../lib/resume';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = ui[locale];
+
+const { half, projects, writing, proofs } = await getResume(locale);
+
+const sectionLabels = {
+  experiences: locale === 'zh' ? '经历' : 'Experience',
+  education: locale === 'zh' ? '教育' : 'Education',
+  projects: locale === 'zh' ? '精选项目' : 'Selected work',
+  skills: locale === 'zh' ? '技术能力' : 'Skills',
+  writing: locale === 'zh' ? '精选写作' : 'Selected writing',
+  awards: locale === 'zh' ? '获奖与认证' : 'Awards & certifications',
+  contact: locale === 'zh' ? '联系方式' : 'Contact',
+};
+
+const editUrl = `https://github.com/Dachui61/Dachui61.github.io/edit/main/content/profile/resume.yaml`;
+---
+
+<Base locale={locale} title={half.label} description={half.summary.split('\n')[0]}>
+  <article class="mx-auto w-full max-w-4xl px-[18px] sm:px-11">
+    <header class="py-14 sm:py-20">
+      <p class="label">{locale === 'zh' ? '简历' : 'Résumé'}</p>
+      <h1
+        class="mt-4 max-w-[20em] text-[2.2rem] leading-[1.12] font-semibold tracking-[-0.038em] sm:text-[3rem]"
+      >
+        {half.label}
+      </h1>
+
+      <div
+        class="mt-7 max-w-[46em] whitespace-pre-line text-[17px] leading-relaxed text-fg-muted lg:text-[19px]"
+      >
+        {half.summary}
+      </div>
+
+      {
+        (half.contact.email || half.contact.links.length > 0) && (
+          <div class="mt-8 flex flex-wrap items-center gap-x-5 gap-y-2">
+            {half.contact.email && (
+              <a
+                href={`mailto:${half.contact.email}`}
+                class="font-mono text-[13px] text-fg transition-colors duration-200 hover:text-accent"
+              >
+                {half.contact.email}
+              </a>
+            )}
+            {half.contact.links.map((link) => (
+              <a
+                href={link.url}
+                rel="noopener"
+                class="font-mono text-[13px] text-fg-muted transition-colors duration-200 hover:text-accent"
+              >
+                {link.label} ↗
+              </a>
+            ))}
+          </div>
+        )
+      }
+    </header>
+
+    {
+      half.experiences.length > 0 && (
+        <section class="border-t border-line">
+          <h2 class="label pt-10">{sectionLabels.experiences}</h2>
+          <div class="mt-6">
+            {half.experiences.map((job) => (
+              <div class="grid gap-2 border-t border-line py-5 sm:grid-cols-[11rem_1fr] sm:gap-6">
+                <span class="label pt-1">{job.period}</span>
+                <div>
+                  <h3 class="text-[1.05rem] font-semibold tracking-[-0.02em]">
+                    {job.role}
+                    <span class="font-normal text-fg-muted"> · {job.org}</span>
+                  </h3>
+                  {job.highlights.length > 0 && (
+                    <ul class="mt-2.5 space-y-1.5">
+                      {job.highlights.map((h) => (
+                        <li class="relative pl-4 text-[15px] leading-relaxed text-fg-muted before:absolute before:top-[0.62em] before:left-0 before:h-1 before:w-1 before:rounded-[1px] before:bg-accent">
+                          {h}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    {
+      half.education.length > 0 && (
+        <section class="border-t border-line">
+          <h2 class="label pt-10">{sectionLabels.education}</h2>
+          <div class="mt-6">
+            {half.education.map((edu) => (
+              <div class="grid gap-2 border-t border-line py-5 sm:grid-cols-[11rem_1fr] sm:gap-6">
+                <span class="label pt-1">{edu.period}</span>
+                <div>
+                  <h3 class="text-[1.05rem] font-semibold tracking-[-0.02em]">
+                    {edu.institution}
+                    {edu.area && (
+                      <span class="font-normal text-fg-muted"> · {edu.area}</span>
+                    )}
+                  </h3>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    {
+      projects.length > 0 && (
+        <section class="border-t border-line">
+          <h2 class="label pt-10">{sectionLabels.projects}</h2>
+          <div class="mt-6">
+            {projects.map((item) => (
+              <a
+                href={pathForLocale(`/work/${item.slug}/`, locale)}
+                class="group block border-t border-line py-5 transition-colors duration-200 hover:bg-card"
+              >
+                <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                  <h3 class="text-[1.05rem] font-semibold tracking-[-0.02em] transition-colors duration-200 group-hover:text-accent">
+                    {item.title}
+                  </h3>
+                  {item.status && <span class="label">· {item.status}</span>}
+                </div>
+                <p class="mt-1.5 max-w-[58ch] text-[15px] leading-relaxed text-fg-muted">
+                  {resumeLine(item, locale)}
+                </p>
+                {item.tech.length > 0 && (
+                  <ul class="mt-2.5 flex flex-wrap gap-1.5">
+                    {item.tech.map((tech) => (
+                      <li class="rounded-[var(--radius-badge)] border border-line px-1.5 py-0.5 font-mono text-[10.5px] text-fg-subtle">
+                        {tech}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </a>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    {
+      half.skills.length > 0 && (
+        <section class="border-t border-line">
+          <h2 class="label pt-10">{sectionLabels.skills}</h2>
+          <div class="mt-6">
+            {half.skills.map((skill) => {
+              const proof = skill.proof ? proofs.get(skill.proof) : undefined;
+              return (
+                <div class="grid gap-1.5 border-t border-line py-5 sm:grid-cols-[14rem_1fr] sm:gap-6">
+                  <h3 class="text-[15px] font-medium tracking-[-0.01em]">{skill.name}</h3>
+                  <div>
+                    {skill.note && (
+                      <p class="max-w-[54ch] text-[15px] leading-relaxed text-fg-muted">
+                        {skill.note}
+                      </p>
+                    )}
+                    {proof && (
+                      <a
+                        href={pathForLocale(`/work/${proof.slug}/`, locale)}
+                        class="mt-2 inline-block font-mono text-[11px] text-accent transition-colors duration-200 hover:text-accent-hover"
+                      >
+                        {locale === 'zh' ? '证据' : 'proof'} → {proof.title} ↗
+                      </a>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      )
+    }
+
+    {
+      writing.length > 0 && (
+        <section class="border-t border-line">
+          <h2 class="label pt-10">{sectionLabels.writing}</h2>
+          <div class="mt-6">
+            {writing.map((item) => (
+              <a
+                href={pathForLocale(`/work/${item.slug}/`, locale)}
+                class="group block border-t border-line py-5 transition-colors duration-200 hover:bg-card"
+              >
+                <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                  <h3 class="text-[1.05rem] font-semibold tracking-[-0.02em] transition-colors duration-200 group-hover:text-accent">
+                    {item.title}
+                  </h3>
+                  {item.date && (
+                    <span class="label">
+                      ·{' '}
+                      {new Intl.DateTimeFormat(locale === 'zh' ? 'zh-CN' : 'en-GB', {
+                        year: 'numeric',
+                        month: 'short',
+                        timeZone: 'Asia/Shanghai',
+                      }).format(item.date)}
+                    </span>
+                  )}
+                </div>
+                <p class="mt-1.5 max-w-[58ch] text-[15px] leading-relaxed text-fg-muted">
+                  {resumeLine(item, locale)}
+                </p>
+              </a>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    {
+      half.awards.length > 0 && (
+        <section class="border-t border-line">
+          <h2 class="label pt-10">{sectionLabels.awards}</h2>
+          <div class="mt-6">
+            {half.awards.map((award) => (
+              <div class="grid gap-2 border-t border-line py-5 sm:grid-cols-[11rem_1fr] sm:gap-6">
+                <span class="label pt-1">{award.date}</span>
+                <div>
+                  <h3 class="text-[1.05rem] font-semibold tracking-[-0.02em]">
+                    {award.url ? (
+                      <a
+                        href={award.url}
+                        rel="noopener"
+                        class="transition-colors duration-200 hover:text-accent"
+                      >
+                        {award.title} ↗
+                      </a>
+                    ) : (
+                      award.title
+                    )}
+                  </h3>
+                  {award.issuer && <p class="mt-1 text-[15px] text-fg-muted">{award.issuer}</p>}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <footer class="mt-16 border-t border-line pt-6 pb-4">
+      <p class="text-[13px] text-fg-subtle">
+        {locale === 'zh'
+          ? '这份简历的内容在一个 YAML 文件里。改完提交，站点会自动重新部署。'
+          : 'The content of this résumé lives in one YAML file. Commit a change and the site redeploys itself.'}
+        <a
+          href={editUrl}
+          rel="noopener"
+          class="ml-1 font-mono text-[12px] text-fg-muted underline decoration-accent underline-offset-2 transition-colors duration-200 hover:text-fg"
+        >
+          {locale === 'zh' ? '在 GitHub 上编辑' : 'Edit on GitHub'} ↗
+        </a>
+      </p>
+    </footer>
+  </article>
+</Base>

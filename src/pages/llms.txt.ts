@@ -15,6 +15,11 @@ export const GET: APIRoute = async ({ site }) => {
     'stable URL, an English title and summary, and a Markdown twin is not required —',
     'the source of truth is the Git repository.',
     '',
+    '## Résumé',
+    '',
+    `- [${origin}/resume/](${origin}/resume/): Experience, education, skills with evidence links, awards, and the selected work below.`,
+    `- [${origin}/en/resume/](${origin}/en/resume/): The same résumé in English.`,
+    '',
     '## Projects',
     '',
   ];

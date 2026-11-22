@@ -18,6 +18,8 @@ tech:
   - RSS
   - SQLite
 featured: true
+resumeLine: 把「今天值得读的」和「附近好玩好吃的」汇进同一条管道，用配额作硬约束打破信息茧房。
+resumeLineEn: One pipeline for a daily brief and a map of nearby places, with quotas as a hard ceiling on concentration.
 ---
 
 ## 它是什么
