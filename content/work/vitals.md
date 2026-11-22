@@ -18,6 +18,7 @@ tech:
   - Swift Package Manager
   - IOKit
   - libSMC
+repo: https://github.com/Dachui61/Vitals
 featured: true
 ---
 
