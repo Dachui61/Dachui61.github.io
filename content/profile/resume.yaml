@@ -7,60 +7,68 @@
 # 约定：
 #   - `zh:` 和 `en:` 是同一份简历的两种语言，字段结构完全一致。
 #   - 多行文字用 `|` 块标量（下面那一块缩进的内容就是正文）。
-#   - `proof:` 填目录里某个条目的 slug，会自动变成一个链接。
+#   - 日期用 ISO 8601，允许只写年月：`'2024-03'`。`end` 留空 = 至今。
+#   - 「精选项目」和「精选写作」不用在这里写：它们由目录条目的
+#     `featured: true` 自动带出来。
+#   - `skills[].proof` 填目录里某个条目的 slug，会自动变成一个链接。
 #     现有 slug：vitals / radar / temperature-backend-and-degradation /
 #     why-no-privileged-component / private-apis-and-degradation /
 #     metric-backends / oss-hotlist-aggregation-landscape /
 #     data-source-feasibility-and-compliance /
 #     diversity-ranking-and-ad-filtering-algorithms /
 #     electron-python-sidecar-integration
-#   - 「精选项目」和「精选写作」不用在这里写：它们由目录条目的
-#     `featured: true` 自动带出来。
+#
+# 这份文件同时会导出一份 JSON Resume v1.9.0 标准的 JSON：
+#   https://dachui61.github.io/resume.json
+#   https://dachui61.github.io/en/resume.json
+# 导出结果在构建时会用官方 schema 校验，校验不过构建会失败。
 # ============================================================================
 
 - id: resume
   zh:
-    # 一句话定位。招聘方扫简历最先看这个。
-    label: macOS / 系统层工程
+    basics:
+      name: 刘宇
+      # 一句话定位。招聘方扫简历最先看这个。
+      label: macOS / 系统层工程
+      # 自我介绍。2-3 段。
+      summary: |
+        我是刘宇，GitHub 上叫 Dachui61。大部分代码在我这台 Mac mini 上跑。
 
-    # 自我介绍。2-3 段。
-    summary: |
-      我是刘宇，GitHub 上叫 Dachui61。大部分代码在我这台 Mac mini 上跑。
+        我写 Swift 和 Electron，做的都是自用工具——不是给别人用的产品，是我自己每天离不开的东西。
+        Vitals 是一个常驻菜单栏的 macOS 监控；Radar 是把「今天值得读的」和「附近好玩好吃的」
+        两条信息流汇进同一套管道的桌面工具，现在还在设计阶段。
 
-      我写 Swift 和 Electron，做的都是自用工具——不是给别人用的产品，是我自己每天离不开的东西。
-      Vitals 是一个常驻菜单栏的 macOS 监控；Radar 是把「今天值得读的」和「附近好玩好吃的」
-      两条信息流汇进同一套管道的桌面工具，现在还在设计阶段。
-
-      做决定之前先查证，结论回到一手来源：仓库主页、仓库里的 README 和 LICENSE、官方文档页。
-      只到搜索结果页级别的判断我会明确标注，取不到的字段写「未取到」，不猜。
-
-    contact:
-      # 留空就不显示这一行。
+        做决定之前先查证，结论回到一手来源：仓库主页、仓库里的 README 和 LICENSE、官方文档页。
+        只到搜索结果页级别的判断我会明确标注，取不到的字段写「未取到」，不猜。
+      # 留空就不显示。
       email: ''
-      links:
-        - label: GitHub
+      profiles:
+        - network: GitHub
+          username: Dachui61
           url: https://github.com/Dachui61
 
     # ---------------------------------------------------------------------
     # 工作经历。按时间倒序。
-    # TODO：这一节还是空的。把下面第一段的占位删掉，照着格式填自己的。
+    # TODO：这一节还是空的。把下面注释掉的示例取消注释，照着格式填自己的。
     # ---------------------------------------------------------------------
-    experiences: []
-    # - period: '2024-03 — 至今'
-    #   role: 某某工程师
-    #   org: 某某公司
+    work: []
+    # - name: 某某公司
+    #   position: 某某工程师
+    #   startDate: '2024-03'
+    #   endDate: ''          # 留空 = 至今
     #   highlights:
     #     - 做成了什么（成果优先，不是职责罗列）
     #     - 做了什么不一样的事
 
     # ---------------------------------------------------------------------
     # 教育。
-    # TODO：同样是空的，照着格式填。
+    # TODO：同样是空的。
     # ---------------------------------------------------------------------
     education: []
     # - institution: 某某大学
     #   area: 计算机科学
-    #   period: '2016 — 2020'
+    #   startDate: '2016'
+    #   endDate: '2020'
 
     # ---------------------------------------------------------------------
     # 技术能力。每项可以挂一条「证据」——指向目录里的某个条目。
@@ -81,44 +89,56 @@
         proof: oss-hotlist-aggregation-landscape
 
     # ---------------------------------------------------------------------
-    # 获奖与认证。
+    # 获奖。
     # TODO：空的。填的时候有链接就填 url。
     # ---------------------------------------------------------------------
     awards: []
     # - title: 某某奖
-    #   issuer: 某某机构
+    #   awarder: 某某机构
     #   date: '2024'
     #   url: https://example.com
 
+    # ---------------------------------------------------------------------
+    # 认证。和获奖不是一回事——认证有颁发方和（通常有）有效期。
+    # TODO：空的。
+    # ---------------------------------------------------------------------
+    certificates: []
+    # - name: 某某认证
+    #   issuer: 某某机构
+    #   date: '2024'
+    #   credentialId: ABC-123
+    #   url: https://example.com
+
   en:
-    # One line. This is what a recruiter reads first.
-    label: macOS / systems engineering
+    basics:
+      name: Yu Liu
+      # One line. This is what a recruiter reads first.
+      label: macOS / systems engineering
+      # Two or three paragraphs.
+      summary: |
+        I am Yu Liu, known as Dachui61 on GitHub. Most of the code runs on this Mac mini.
 
-    # Two or three paragraphs.
-    summary: |
-      I am Yu Liu, known as Dachui61 on GitHub. Most of the code runs on this Mac mini.
+        I write Swift and Electron, and everything I build is for my own use — not a product for
+        someone else, but something I need every day. Vitals is a menu-bar monitor that lives on
+        this machine; Radar is a desktop tool that puts a daily brief and a map of nearby places
+        through one shared pipeline, still being designed.
 
-      I write Swift and Electron, and everything I build is for my own use — not a product for
-      someone else, but something I need every day. Vitals is a menu-bar monitor that lives on
-      this machine; Radar is a desktop tool that puts a daily brief and a map of nearby places
-      through one shared pipeline, still being designed.
-
-      I verify before deciding, and every conclusion goes back to a primary source: the repository
-      page, the README and LICENSE inside it, the official documentation. Judgements that only
-      reach search-result level are labelled as such, and fields I could not fetch are written as
-      "not fetched" rather than guessed.
-
-    contact:
+        I verify before deciding, and every conclusion goes back to a primary source: the repository
+        page, the README and LICENSE inside it, the official documentation. Judgements that only
+        reach search-result level are labelled as such, and fields I could not fetch are written as
+        "not fetched" rather than guessed.
       email: ''
-      links:
-        - label: GitHub
+      profiles:
+        - network: GitHub
+          username: Dachui61
           url: https://github.com/Dachui61
 
     # TODO: still empty — fill in with the same shape as the Chinese block.
-    experiences: []
-    # - period: '2024-03 — present'
-    #   role: Some Engineer
-    #   org: Some Company
+    work: []
+    # - name: Some Company
+    #   position: Some Engineer
+    #   startDate: '2024-03'
+    #   endDate: ''
     #   highlights:
     #     - What you built, outcome first
     #     - What was different about it
@@ -127,7 +147,8 @@
     education: []
     # - institution: Some University
     #   area: Computer Science
-    #   period: '2016 — 2020'
+    #   startDate: '2016'
+    #   endDate: '2020'
 
     skills:
       - name: Swift / SwiftUI
@@ -146,7 +167,14 @@
     # TODO: still empty.
     awards: []
     # - title: Some Award
-    #   issuer: Some Organisation
+    #   awarder: Some Organisation
     #   date: '2024'
     #   url: https://example.com
 
+    # TODO: still empty.
+    certificates: []
+    # - name: Some Certification
+    #   issuer: Some Organisation
+    #   date: '2024'
+    #   credentialId: ABC-123
+    #   url: https://example.com

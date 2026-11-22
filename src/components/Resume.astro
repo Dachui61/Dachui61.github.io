@@ -25,40 +25,40 @@ const sectionLabels = {
 const editUrl = `https://github.com/Dachui61/Dachui61.github.io/edit/main/content/profile/resume.yaml`;
 ---
 
-<Base locale={locale} title={half.label} description={half.summary.split('\n')[0]}>
+<Base locale={locale} title={half.basics.label} description={half.basics.summary.split('\n')[0]}>
   <article class="mx-auto w-full max-w-4xl px-[18px] sm:px-11">
     <header class="py-14 sm:py-20">
       <p class="label">{locale === 'zh' ? '简历' : 'Résumé'}</p>
       <h1
         class="mt-4 max-w-[20em] text-[2.2rem] leading-[1.12] font-semibold tracking-[-0.038em] sm:text-[3rem]"
       >
-        {half.label}
+        {half.basics.label}
       </h1>
 
       <div
         class="mt-7 max-w-[46em] whitespace-pre-line text-[17px] leading-relaxed text-fg-muted lg:text-[19px]"
       >
-        {half.summary}
+        {half.basics.summary}
       </div>
 
       {
-        (half.contact.email || half.contact.links.length > 0) && (
+        (half.basics.email || half.basics.profiles.length > 0) && (
           <div class="mt-8 flex flex-wrap items-center gap-x-5 gap-y-2">
-            {half.contact.email && (
+            {half.basics.email && (
               <a
-                href={`mailto:${half.contact.email}`}
+                href={`mailto:${half.basics.email}`}
                 class="font-mono text-[13px] text-fg transition-colors duration-200 hover:text-accent"
               >
-                {half.contact.email}
+                {half.basics.email}
               </a>
             )}
-            {half.contact.links.map((link) => (
+            {half.basics.profiles.map((link) => (
               <a
                 href={link.url}
                 rel="noopener"
                 class="font-mono text-[13px] text-fg-muted transition-colors duration-200 hover:text-accent"
               >
-                {link.label} ↗
+                {link.network} ↗
               </a>
             ))}
           </div>
@@ -67,13 +67,15 @@ const editUrl = `https://github.com/Dachui61/Dachui61.github.io/edit/main/conten
     </header>
 
     {
-      half.experiences.length > 0 && (
+      half.work.length > 0 && (
         <section class="border-t border-line">
           <h2 class="label pt-10">{sectionLabels.experiences}</h2>
           <div class="mt-6">
-            {half.experiences.map((job) => (
+            {half.work.map((job) => (
               <div class="grid gap-2 border-t border-line py-5 sm:grid-cols-[11rem_1fr] sm:gap-6">
-                <span class="label pt-1">{job.period}</span>
+                <span class="label pt-1">
+                  {job.startDate}{job.endDate ? ` — ${job.endDate}` : locale === 'zh' ? ' — 至今' : ' — present'}
+                </span>
                 <div>
                   <h3 class="text-[1.05rem] font-semibold tracking-[-0.02em]">
                     {job.role}
@@ -103,7 +105,9 @@ const editUrl = `https://github.com/Dachui61/Dachui61.github.io/edit/main/conten
           <div class="mt-6">
             {half.education.map((edu) => (
               <div class="grid gap-2 border-t border-line py-5 sm:grid-cols-[11rem_1fr] sm:gap-6">
-                <span class="label pt-1">{edu.period}</span>
+                <span class="label pt-1">
+                  {[edu.startDate, edu.endDate].filter(Boolean).join(' — ')}
+                </span>
                 <div>
                   <h3 class="text-[1.05rem] font-semibold tracking-[-0.02em]">
                     {edu.institution}
@@ -244,7 +248,41 @@ const editUrl = `https://github.com/Dachui61/Dachui61.github.io/edit/main/conten
                       award.title
                     )}
                   </h3>
-                  {award.issuer && <p class="mt-1 text-[15px] text-fg-muted">{award.issuer}</p>}
+                  {award.awarder && <p class="mt-1 text-[15px] text-fg-muted">{award.awarder}</p>}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    {
+      half.certificates.length > 0 && (
+        <section class="border-t border-line">
+          <h2 class="label pt-10">{sectionLabels.certificates}</h2>
+          <div class="mt-6">
+            {half.certificates.map((cert) => (
+              <div class="grid gap-2 border-t border-line py-5 sm:grid-cols-[11rem_1fr] sm:gap-6">
+                <span class="label pt-1">{cert.date}</span>
+                <div>
+                  <h3 class="text-[1.05rem] font-semibold tracking-[-0.02em]">
+                    {cert.url ? (
+                      <a
+                        href={cert.url}
+                        rel="noopener"
+                        class="transition-colors duration-200 hover:text-accent"
+                      >
+                        {cert.name} ↗
+                      </a>
+                    ) : (
+                      cert.name
+                    )}
+                  </h3>
+                  {cert.issuer && <p class="mt-1 text-[15px] text-fg-muted">{cert.issuer}</p>}
+                  {cert.credentialId && (
+                    <p class="mt-1 font-mono text-[11px] text-fg-subtle">{cert.credentialId}</p>
+                  )}
                 </div>
               </div>
             ))}

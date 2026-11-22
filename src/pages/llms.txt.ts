@@ -19,6 +19,7 @@ export const GET: APIRoute = async ({ site }) => {
     '',
     `- [${origin}/resume/](${origin}/resume/): Experience, education, skills with evidence links, awards, and the selected work below.`,
     `- [${origin}/en/resume/](${origin}/en/resume/): The same résumé in English.`,
+    `- [${origin}/resume.json](${origin}/resume.json): The résumé as JSON Resume v1.9.0, validated against the official schema.`,
     '',
     '## Projects',
     '',

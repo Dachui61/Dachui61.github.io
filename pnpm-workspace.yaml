@@ -1,0 +1,2 @@
+minimumReleaseAgeExclude:
+  - '@jsonresume/schema@1.9.0'

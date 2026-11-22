@@ -34,29 +34,31 @@ const work = defineCollection({
 
 /** One half of a résumé. The two halves are the same shape. */
 const resumeHalf = z.object({
-  /** One line. What you are. */
-  label: z.string(),
-  /** Two or three paragraphs of prose. */
-  summary: z.string(),
-  contact: z
-    .object({
-      email: z.string().default(''),
-      links: z
-        .array(
-          z.object({
-            label: z.string(),
-            url: z.string(),
-          }),
-        )
-        .default([]),
-    })
-    .default({ email: '', links: [] }),
-  experiences: z
+  basics: z.object({
+    name: z.string(),
+    /** One line. What you are. */
+    label: z.string(),
+    /** Two or three paragraphs of prose. */
+    summary: z.string(),
+    email: z.string().default(''),
+    profiles: z
+      .array(
+        z.object({
+          network: z.string(),
+          username: z.string().default(''),
+          url: z.string(),
+        }),
+      )
+      .default([]),
+  }),
+  work: z
     .array(
       z.object({
-        period: z.string(),
-        role: z.string(),
-        org: z.string(),
+        name: z.string(),
+        position: z.string(),
+        /** ISO 8601, partial dates allowed. Empty endDate means "present". */
+        startDate: z.string().default(''),
+        endDate: z.string().default(''),
         highlights: z.array(z.string()).default([]),
       }),
     )
@@ -66,7 +68,8 @@ const resumeHalf = z.object({
       z.object({
         institution: z.string(),
         area: z.string().default(''),
-        period: z.string().default(''),
+        startDate: z.string().default(''),
+        endDate: z.string().default(''),
       }),
     )
     .default([]),
@@ -84,8 +87,19 @@ const resumeHalf = z.object({
     .array(
       z.object({
         title: z.string(),
+        awarder: z.string().default(''),
+        date: z.string().default(''),
+        url: z.string().optional(),
+      }),
+    )
+    .default([]),
+  certificates: z
+    .array(
+      z.object({
+        name: z.string(),
         issuer: z.string().default(''),
         date: z.string().default(''),
+        credentialId: z.string().default(''),
         url: z.string().optional(),
       }),
     )

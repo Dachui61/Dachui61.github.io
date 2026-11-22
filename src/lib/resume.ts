@@ -3,18 +3,35 @@ import { pick, type Locale } from '../i18n';
 import { getResolved, type Resolved } from './entries';
 
 export type ResumeHalf = {
-  label: string;
-  summary: string;
-  contact: { email: string; links: { label: string; url: string }[] };
-  experiences: {
-    period: string;
-    role: string;
-    org: string;
+  basics: {
+    name: string;
+    label: string;
+    summary: string;
+    email: string;
+    profiles: { network: string; username: string; url: string }[];
+  };
+  work: {
+    name: string;
+    position: string;
+    startDate: string;
+    endDate: string;
     highlights: string[];
   }[];
-  education: { institution: string; area: string; period: string }[];
+  education: {
+    institution: string;
+    area: string;
+    startDate: string;
+    endDate: string;
+  }[];
   skills: { name: string; note: string; proof?: string }[];
-  awards: { title: string; issuer: string; date: string; url?: string }[];
+  awards: { title: string; awarder: string; date: string; url?: string }[];
+  certificates: {
+    name: string;
+    issuer: string;
+    date: string;
+    credentialId: string;
+    url?: string;
+  }[];
 };
 
 export type Resume = {
