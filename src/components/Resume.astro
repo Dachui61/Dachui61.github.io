@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import { pathForLocale, ui, type Locale } from '../i18n';
-import { getResume, resumeLine } from '../lib/resume';
+import { getResume, resumeLine, dateRange } from '../lib/resume';
 
 interface Props {
   locale: Locale;
@@ -13,13 +13,13 @@ const t = ui[locale];
 const { half, projects, writing, proofs } = await getResume(locale);
 
 const sectionLabels = {
-  experiences: locale === 'zh' ? '经历' : 'Experience',
-  education: locale === 'zh' ? '教育' : 'Education',
-  projects: locale === 'zh' ? '精选项目' : 'Selected work',
+  work: locale === 'zh' ? '工作经历' : 'Work',
+  education: locale === 'zh' ? '教育背景' : 'Education',
+  projects: locale === 'zh' ? '项目' : 'Projects',
   skills: locale === 'zh' ? '技术能力' : 'Skills',
   writing: locale === 'zh' ? '精选写作' : 'Selected writing',
-  awards: locale === 'zh' ? '获奖与认证' : 'Awards & certifications',
-  contact: locale === 'zh' ? '联系方式' : 'Contact',
+  awards: locale === 'zh' ? '获奖' : 'Awards',
+  certificates: locale === 'zh' ? '认证' : 'Certifications',
 };
 
 const editUrl = `https://github.com/Dachui61/Dachui61.github.io/edit/main/content/profile/resume.yaml`;
@@ -30,7 +30,7 @@ const editUrl = `https://github.com/Dachui61/Dachui61.github.io/edit/main/conten
     <header class="py-14 sm:py-20">
       <p class="label">{locale === 'zh' ? '简历' : 'Résumé'}</p>
       <h1
-        class="mt-4 max-w-[20em] text-[2.2rem] leading-[1.12] font-semibold tracking-[-0.038em] sm:text-[3rem]"
+        class="mt-4 max-w-[22em] text-[2.1rem] leading-[1.12] font-semibold tracking-[-0.038em] sm:text-[2.8rem]"
       >
         {half.basics.label}
       </h1>
@@ -41,51 +41,75 @@ const editUrl = `https://github.com/Dachui61/Dachui61.github.io/edit/main/conten
         {half.basics.summary}
       </div>
 
-      {
-        (half.basics.email || half.basics.profiles.length > 0) && (
-          <div class="mt-8 flex flex-wrap items-center gap-x-5 gap-y-2">
-            {half.basics.email && (
-              <a
-                href={`mailto:${half.basics.email}`}
-                class="font-mono text-[13px] text-fg transition-colors duration-200 hover:text-accent"
-              >
-                {half.basics.email}
-              </a>
-            )}
-            {half.basics.profiles.map((link) => (
-              <a
-                href={link.url}
-                rel="noopener"
-                class="font-mono text-[13px] text-fg-muted transition-colors duration-200 hover:text-accent"
-              >
-                {link.network} ↗
-              </a>
-            ))}
-          </div>
-        )
-      }
+      <div class="mt-8 flex flex-wrap items-center gap-x-5 gap-y-2">
+        {
+          half.basics.email && (
+            <a
+              href={`mailto:${half.basics.email}`}
+              class="font-mono text-[13px] text-fg transition-colors duration-200 hover:text-accent"
+            >
+              {half.basics.email}
+            </a>
+          )
+        }
+        {
+          half.basics.phone && (
+            <a
+              href={`tel:${half.basics.phone}`}
+              class="font-mono text-[13px] text-fg-muted transition-colors duration-200 hover:text-accent"
+            >
+              {half.basics.phone}
+            </a>
+          )
+        }
+        {
+          half.basics.location.city && (
+            <span class="font-mono text-[13px] text-fg-subtle">
+              {half.basics.location.city}
+            </span>
+          )
+        }
+        {
+          half.basics.profiles.map((link) => (
+            <a
+              href={link.url}
+              rel="noopener"
+              class="font-mono text-[13px] text-fg-muted transition-colors duration-200 hover:text-accent"
+            >
+              {link.network} ↗
+            </a>
+          ))
+        }
+      </div>
     </header>
 
     {
       half.work.length > 0 && (
         <section class="border-t border-line">
-          <h2 class="label pt-10">{sectionLabels.experiences}</h2>
+          <h2 class="label pt-10">{sectionLabels.work}</h2>
           <div class="mt-6">
             {half.work.map((job) => (
               <div class="grid gap-2 border-t border-line py-5 sm:grid-cols-[11rem_1fr] sm:gap-6">
-                <span class="label pt-1">
-                  {job.startDate}{job.endDate ? ` — ${job.endDate}` : locale === 'zh' ? ' — 至今' : ' — present'}
-                </span>
+                <span class="label pt-1">{dateRange(job.startDate, job.endDate, locale)}</span>
                 <div>
                   <h3 class="text-[1.05rem] font-semibold tracking-[-0.02em]">
-                    {job.role}
-                    <span class="font-normal text-fg-muted"> · {job.org}</span>
+                    {job.position}
+                    <span class="font-normal text-fg-muted"> · {job.name}</span>
                   </h3>
                   {job.highlights.length > 0 && (
-                    <ul class="mt-2.5 space-y-1.5">
+                    <ul class="mt-3 space-y-1.5">
                       {job.highlights.map((h) => (
                         <li class="relative pl-4 text-[15px] leading-relaxed text-fg-muted before:absolute before:top-[0.62em] before:left-0 before:h-1 before:w-1 before:rounded-[1px] before:bg-accent">
                           {h}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  {job.keywords.length > 0 && (
+                    <ul class="mt-3 flex flex-wrap gap-1.5">
+                      {job.keywords.map((tech) => (
+                        <li class="rounded-[var(--radius-badge)] border border-line px-1.5 py-0.5 font-mono text-[10.5px] text-fg-subtle">
+                          {tech}
                         </li>
                       ))}
                     </ul>
@@ -106,7 +130,7 @@ const editUrl = `https://github.com/Dachui61/Dachui61.github.io/edit/main/conten
             {half.education.map((edu) => (
               <div class="grid gap-2 border-t border-line py-5 sm:grid-cols-[11rem_1fr] sm:gap-6">
                 <span class="label pt-1">
-                  {[edu.startDate, edu.endDate].filter(Boolean).join(' — ')}
+                  {dateRange(edu.startDate, edu.endDate, locale)}
                 </span>
                 <div>
                   <h3 class="text-[1.05rem] font-semibold tracking-[-0.02em]">
@@ -124,7 +148,7 @@ const editUrl = `https://github.com/Dachui61/Dachui61.github.io/edit/main/conten
     }
 
     {
-      projects.length > 0 && (
+      (projects.length > 0 || half.projects.length > 0) && (
         <section class="border-t border-line">
           <h2 class="label pt-10">{sectionLabels.projects}</h2>
           <div class="mt-6">
@@ -153,6 +177,49 @@ const editUrl = `https://github.com/Dachui61/Dachui61.github.io/edit/main/conten
                 )}
               </a>
             ))}
+            {half.projects.map((project) => (
+              <div class="border-t border-line py-5">
+                <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                  <h3 class="text-[1.05rem] font-semibold tracking-[-0.02em]">
+                    {project.name}
+                  </h3>
+                  {project.entity && <span class="label">· {project.entity}</span>}
+                  <span class="label">
+                    · {dateRange(project.startDate, project.endDate, locale)}
+                  </span>
+                </div>
+                {project.summary && (
+                  <p class="mt-1.5 max-w-[58ch] text-[15px] leading-relaxed text-fg-muted">
+                    {project.summary}
+                  </p>
+                )}
+                {project.highlights.length > 0 && (
+                  <ul class="mt-3 space-y-1.5">
+                    {project.highlights.map((h) => (
+                      <li class="relative pl-4 text-[15px] leading-relaxed text-fg-muted before:absolute before:top-[0.62em] before:left-0 before:h-1 before:w-1 before:rounded-[1px] before:bg-accent">
+                        {h}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                <div class="mt-3 flex flex-wrap items-center gap-1.5">
+                  {project.keywords.map((tech) => (
+                    <span class="rounded-[var(--radius-badge)] border border-line px-1.5 py-0.5 font-mono text-[10.5px] text-fg-subtle">
+                      {tech}
+                    </span>
+                  ))}
+                  {project.url && (
+                    <a
+                      href={project.url}
+                      rel="noopener"
+                      class="rounded-[var(--radius-badge)] border border-accent-line bg-accent-panel px-1.5 py-0.5 font-mono text-[10.5px] text-accent transition-colors duration-200 hover:bg-accent"
+                    >
+                      {locale === 'zh' ? '源码' : 'source'} ↗
+                    </a>
+                  )}
+                </div>
+              </div>
+            ))}
           </div>
         </section>
       )
@@ -166,7 +233,7 @@ const editUrl = `https://github.com/Dachui61/Dachui61.github.io/edit/main/conten
             {half.skills.map((skill) => {
               const proof = skill.proof ? proofs.get(skill.proof) : undefined;
               return (
-                <div class="grid gap-1.5 border-t border-line py-5 sm:grid-cols-[14rem_1fr] sm:gap-6">
+                <div class="grid gap-1.5 border-t border-line py-5 sm:grid-cols-[15rem_1fr] sm:gap-6">
                   <h3 class="text-[15px] font-medium tracking-[-0.01em]">{skill.name}</h3>
                   <div>
                     {skill.note && (
@@ -248,7 +315,9 @@ const editUrl = `https://github.com/Dachui61/Dachui61.github.io/edit/main/conten
                       award.title
                     )}
                   </h3>
-                  {award.awarder && <p class="mt-1 text-[15px] text-fg-muted">{award.awarder}</p>}
+                  {award.awarder && (
+                    <p class="mt-1 text-[15px] text-fg-muted">{award.awarder}</p>
+                  )}
                 </div>
               </div>
             ))}
@@ -261,32 +330,24 @@ const editUrl = `https://github.com/Dachui61/Dachui61.github.io/edit/main/conten
       half.certificates.length > 0 && (
         <section class="border-t border-line">
           <h2 class="label pt-10">{sectionLabels.certificates}</h2>
-          <div class="mt-6">
+          <ul class="mt-6 grid gap-px overflow-hidden rounded-[var(--radius-card)] border border-line bg-line sm:grid-cols-2">
             {half.certificates.map((cert) => (
-              <div class="grid gap-2 border-t border-line py-5 sm:grid-cols-[11rem_1fr] sm:gap-6">
-                <span class="label pt-1">{cert.date}</span>
-                <div>
-                  <h3 class="text-[1.05rem] font-semibold tracking-[-0.02em]">
-                    {cert.url ? (
-                      <a
-                        href={cert.url}
-                        rel="noopener"
-                        class="transition-colors duration-200 hover:text-accent"
-                      >
-                        {cert.name} ↗
-                      </a>
-                    ) : (
-                      cert.name
-                    )}
-                  </h3>
-                  {cert.issuer && <p class="mt-1 text-[15px] text-fg-muted">{cert.issuer}</p>}
-                  {cert.credentialId && (
-                    <p class="mt-1 font-mono text-[11px] text-fg-subtle">{cert.credentialId}</p>
+              <li class="flex items-baseline gap-3 bg-card px-5 py-4">
+                <span class="mt-1.5 h-1 w-1 shrink-0 rounded-[1px] bg-accent" aria-hidden="true" />
+                <span>
+                  <span class="block text-[15px] text-fg">{cert.name}</span>
+                  {cert.issuer && (
+                    <span class="mt-0.5 block text-[13px] text-fg-subtle">{cert.issuer}</span>
                   )}
-                </div>
-              </div>
+                  {cert.credentialId && (
+                    <span class="mt-0.5 block font-mono text-[11px] text-fg-subtle">
+                      {cert.credentialId}
+                    </span>
+                  )}
+                </span>
+              </li>
             ))}
-          </div>
+          </ul>
         </section>
       )
     }

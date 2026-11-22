@@ -44,15 +44,19 @@ export function toJsonResume({
       label: basics.label,
       summary: basics.summary,
       ...(basics.email ? { email: basics.email } : {}),
+      ...(basics.phone ? { phone: basics.phone } : {}),
+      ...(basics.location.city ? { location: basics.location } : {}),
       ...(basics.profiles.length ? { profiles: basics.profiles } : {}),
     },
     work: half.work.map((job) => ({
       name: job.name,
       position: job.position,
+      ...(job.type ? { type: job.type } : {}),
       ...(job.startDate ? { startDate: job.startDate } : {}),
       // An empty endDate means "still there" — JSON Resume says omit it.
       ...(job.endDate ? { endDate: job.endDate } : {}),
       ...(job.highlights.length ? { highlights: job.highlights } : {}),
+      ...(job.keywords.length ? { keywords: job.keywords } : {}),
     })),
     education: half.education.map((edu) => ({
       institution: edu.institution,
@@ -86,12 +90,24 @@ export function toJsonResume({
       ...(cert.credentialId ? { credentialId: cert.credentialId } : {}),
       ...(cert.url ? { url: cert.url } : {}),
     })),
-    projects: projects.map((project) => ({
-      name: project.title,
-      summary: resumeLine(project, locale),
-      url: `${origin}/work/${project.slug}/`,
-      ...(project.tech.length ? { highlights: project.tech, keywords: project.tech } : {}),
-    })),
+    projects: [
+      ...projects.map((project) => ({
+        name: project.title,
+        summary: resumeLine(project, locale),
+        url: `${origin}/work/${project.slug}/`,
+        ...(project.tech.length ? { highlights: project.tech, keywords: project.tech } : {}),
+      })),
+      ...half.projects.map((project) => ({
+        name: project.name,
+        summary: project.summary,
+        ...(project.entity ? { entity: project.entity } : {}),
+        ...(project.startDate ? { startDate: project.startDate } : {}),
+        ...(project.endDate ? { endDate: project.endDate } : {}),
+        ...(project.url ? { url: project.url } : {}),
+        ...(project.highlights.length ? { highlights: project.highlights } : {}),
+        ...(project.keywords.length ? { keywords: project.keywords } : {}),
+      })),
+    ],
     meta: {
       canonical,
       version: '1.9.0',

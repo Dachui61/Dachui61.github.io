@@ -41,6 +41,13 @@ const resumeHalf = z.object({
     /** Two or three paragraphs of prose. */
     summary: z.string(),
     email: z.string().default(''),
+    phone: z.string().default(''),
+    location: z
+      .object({
+        city: z.string().default(''),
+        countryCode: z.string().default(''),
+      })
+      .default({ city: '', countryCode: '' }),
     profiles: z
       .array(
         z.object({
@@ -60,6 +67,10 @@ const resumeHalf = z.object({
         startDate: z.string().default(''),
         endDate: z.string().default(''),
         highlights: z.array(z.string()).default([]),
+        /** The stack this role was built on. */
+        keywords: z.array(z.string()).default([]),
+        /** How the role was held: full-time, contract, campus project… */
+        type: z.string().default(''),
       }),
     )
     .default([]),
@@ -80,6 +91,21 @@ const resumeHalf = z.object({
         note: z.string().default(''),
         /** Slug of a `work` entry that proves this skill. */
         proof: z.string().optional(),
+      }),
+    )
+    .default([]),
+  /** Projects that are not entries in the catalogue. */
+  projects: z
+    .array(
+      z.object({
+        name: z.string(),
+        summary: z.string().default(''),
+        entity: z.string().default(''),
+        startDate: z.string().default(''),
+        endDate: z.string().default(''),
+        url: z.string().default(''),
+        highlights: z.array(z.string()).default([]),
+        keywords: z.array(z.string()).default([]),
       }),
     )
     .default([]),
