@@ -29,6 +29,9 @@ const work = defineCollection({
     featured: z.boolean().default(false),
     /** Whether a body exists for this locale. */
     hasBody: z.boolean().default(true),
+    /** A recorded demo under public/media — `vitals-demo` renders the player. */
+    demo: z.string().optional(),
+    demoCaption: z.string().optional(),
   }),
 });
 

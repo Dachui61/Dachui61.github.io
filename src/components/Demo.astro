@@ -1,0 +1,72 @@
+---
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+
+interface Props {
+  /** Asset name under public/media — `<name>.mp4`, `<name>.webm`, `<name>-poster.jpg`. */
+  name: string;
+  /** Caption shown under the player. */
+  caption?: string;
+  /** Override the poster path. */
+  poster?: string;
+  /** Intrinsic size, used to avoid layout shift. */
+  width?: number;
+  height?: number;
+}
+
+const { name, caption, poster, width = 1720, height = 820 } = Astro.props;
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const mediaDir = join(process.cwd(), 'public', 'media');
+
+/** The player only appears if the recording is actually there — no broken <video>. */
+const hasVideo = existsSync(join(mediaDir, `${name}.mp4`));
+const posterPath = poster ?? `${base}/media/${name}-poster.jpg`;
+---
+
+<figure class="my-8">
+  <div class="relative overflow-hidden rounded-[var(--radius-card)] border border-line bg-card">
+    <img
+      src={posterPath}
+      alt={caption ?? ''}
+      width={width}
+      height={height}
+      loading="lazy"
+      decoding="async"
+      class="block w-full"
+    />
+    {
+      hasVideo && (
+        <video
+          class="absolute inset-0 h-full w-full object-cover"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+          poster={posterPath}
+          aria-label={caption ?? ''}
+        >
+          <source src={`${base}/media/${name}.webm`} type="video/webm" />
+          <source src={`${base}/media/${name}.mp4`} type="video/mp4" />
+        </video>
+      )
+    }
+  </div>
+  {
+    caption && (
+      <figcaption class="label mt-3">
+        {caption}
+      </figcaption>
+    )
+  }
+</figure>
+
+<style>
+  /* Someone who asked for less motion gets the still frame, not the video. */
+  @media (prefers-reduced-motion: reduce) {
+    video {
+      display: none;
+    }
+  }
+</style>

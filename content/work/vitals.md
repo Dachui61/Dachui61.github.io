@@ -20,6 +20,8 @@ tech:
   - libSMC
 repo: https://github.com/Dachui61/Vitals
 featured: true
+demo: vitals-demo
+demoCaption: 真实运行中的悬浮窗（L3 档位，1 秒刷新一次）
 resumeLine: 常驻本机的 macOS 监控：CPU 温度用无特权方式读取，读不到就降级并写明原因。
 resumeLineEn: A macOS monitor that lives on one machine — CPU temperature read without privileges, degraded and explained when it cannot be read.
 ---
