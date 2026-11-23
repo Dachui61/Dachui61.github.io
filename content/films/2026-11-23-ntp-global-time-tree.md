@@ -11,8 +11,8 @@ audience: "面向中文大众的科技科普短视频（B 站 / 视频号 横屏
 basis: "当天热点第 4 条（Jeff Geerling《I joined the NTP Pool, but not with my Stratum 1 Pi》，2026-11-17，Hacker News 榜）+ RFC 5905 + pool.ntp.org 官网。资料与可上屏事实见 `research/sources.md`、`research/facts.md`。"
 brand: "主色 晒黄 `#EDBB72`（时间基准 / 当前被解释对象）· 底色 蓝晒深蓝 `#0E2B47` · 网络色 天青 `#79D0E6`；字体 Noto Sans SC / JetBrains Mono（`fonts/`）。"
 style: "无人值守，本项由代理自选（Runbook §0 授权）。选定「工程蓝图 blueprint」+ concept-morph 的对象对应原则，理由见 `direction.style`；风格帧存 `qa/style-frames.png`。"
-video: "/media/films/2026-11-23-ntp-global-time-tree.mp4"
-poster: "/media/films/2026-11-23-ntp-global-time-tree-poster.png"
+video: "https://github.com/Dachui61/daily-hot-video/releases/download/2026-11-23-ntp-global-time-tree/2026-11-23-ntp-global-time-tree.mp4"
+poster: "/media/films/2026-11-23-ntp-global-time-tree-poster.webp"
 ---
 ## 这一期在讲什么
 

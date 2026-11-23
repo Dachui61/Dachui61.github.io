@@ -27,6 +27,16 @@ const arg = (name, fallback) => {
 const EPISODES = arg('--episodes', '/Users/liuyu/Documents/motions/daily-hot-video/episodes');
 const OUT = join(siteRoot, 'content/films');
 
+/**
+ * The video lives in a GitHub Release, not in this repository: a single file
+ * over 100 MB is rejected by GitHub, and daily episodes would push the repo
+ * past the size it should be. The release URL is derived from the slug, so
+ * publishing an episode never touches the content file.
+ */
+const RELEASE_REPO = 'Dachui61/daily-hot-video';
+const releaseUrl = (slug) =>
+  `https://github.com/${RELEASE_REPO}/releases/download/${slug}/${slug}.mp4`;
+
 /** Pull one field out of brief.md. Handles both the old and new label shapes. */
 function field(brief, label) {
   const m = brief.match(new RegExp(`^${label}[^\\n：:]*[：:]\\s*(.+)$`, 'm'));
@@ -117,8 +127,8 @@ async function build() {
       `basis: ${y(basis)}`,
       `brand: ${y(brand)}`,
       `style: ${y(style)}`,
-      `video: ${y(`/media/films/${slug}.mp4`)}`,
-      `poster: ${y(`/media/films/${slug}-poster.png`)}`,
+      `video: ${y(releaseUrl(slug))}`,
+      `poster: ${y(`/media/films/${slug}-poster.webp`)}`,
       '---',
       '',
     ]

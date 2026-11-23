@@ -11,8 +11,8 @@ audience: "中文泛知识观众（B 站 / 视频号横屏科普）。依据：R
 basis: "资料见 `research/sources.md`（Anthropic 研究博客 + 两份 Hexagon 预印本 + 4 篇 arXiv 原始论文 + 2 篇英文维基百科，共 9 个独立来源）与 `research/facts.md`（32 条可上屏事实，每条可回指来源）。口播稿由代理撰写（见下方来源声明）。BGM 与音效由 AI 代码合成（`score.mjs` / `score.sfx.mjs`）。"
 brand: "主色 `#8AB6FF`（量子侧 / 碗沿 / 公式），强调色 `#FF9E64`（重力侧 / 桶内 / 黑洞），常量色 `#FFD98A`（常数 / 关键数字 / 阈值），语义玫红 `#FF7A93`（负号 / 被排除 / 地板）；字体 Noto Sans SC（中文）+ Space Grotesk（数字）+ JetBrains Mono（公式），文件在 `fonts/`。"
 style: "本项由代理自主决策（无人值守授权）。选定方向：`concept-morph`（概念形变），理由见「本期无人值守决策记录」。风格帧存 `qa/style-frames.png`。"
-video: "/media/films/2026-11-20-claude-black-hole-physics.mp4"
-poster: "/media/films/2026-11-20-claude-black-hole-physics-poster.png"
+video: "https://github.com/Dachui61/daily-hot-video/releases/download/2026-11-20-claude-black-hole-physics/2026-11-20-claude-black-hole-physics.mp4"
+poster: "/media/films/2026-11-20-claude-black-hole-physics-poster.webp"
 ---
 ## 这一期在讲什么
 

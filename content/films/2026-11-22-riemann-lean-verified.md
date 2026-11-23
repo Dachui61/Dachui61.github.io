@@ -11,8 +11,8 @@ audience: "推断 —— 面向中文信息流观众（B 站 / 视频号 / 抖�
 basis: "`research/sources.md`（S1–S9 一手公开来源）+ `research/facts.md`（A/B/C/D/E 五组可上屏事实，每个数字都标注来源）。所有上屏数字均可回指。"
 brand: "无既有品牌。主色见 palette。"
 style: "由代理自主决定（无人值守，Runbook §0 已授权）。选定方向：`concept-morph` 改造为「稿纸 / 印刷体」材质 —— 米白纸底 + 细方格坐标纸 + 墨线，而非 concept-morph 默认的黑底彩线。理由见「本期无人值守决策记录」。三张风格帧（hook / 记忆点 / 结尾）已渲入 `qa/style-frames.png`。"
-video: "/media/films/2026-11-22-riemann-lean-verified.mp4"
-poster: "/media/films/2026-11-22-riemann-lean-verified-poster.png"
+video: "https://github.com/Dachui61/daily-hot-video/releases/download/2026-11-22-riemann-lean-verified/2026-11-22-riemann-lean-verified.mp4"
+poster: "/media/films/2026-11-22-riemann-lean-verified-poster.webp"
 ---
 ## 这一期在讲什么
 

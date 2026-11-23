@@ -75,7 +75,7 @@ const dateText = new Intl.DateTimeFormat(locale === 'zh' ? 'zh-CN' : 'en-GB', {
         playsinline
         aria-label={d.title}
       >
-        <source src={`${base}${d.video}`} type="video/mp4" />
+        <source src={d.video.startsWith('http') ? d.video : `${base}${d.video}`} type="video/mp4" />
       </video>
     </figure>
 
