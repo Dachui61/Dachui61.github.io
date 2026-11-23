@@ -50,6 +50,22 @@ scripts/
 docs/adr/         the decisions behind this site
 ```
 
+## Publishing content
+
+Content changes go through the **`publish-site`** skill — it carries the
+build→deploy→verify loop, the split between the content sources, how videos
+are distributed through GitHub Releases, and the limits that have already
+ bitten once.
+
+```bash
+# the skill is installed from this repo
+ln -s "$PWD/skills/publish-site" ~/.agents/skills/publish-site
+```
+
+`skills/publish-site/` is the canonical copy. Edit it here and the installed
+skill updates with it — one source of truth, versioned with the content it
+publishes.
+
 ## Content workflow
 
 Long-form content is written in a separate working repository and synced

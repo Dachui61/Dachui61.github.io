@@ -8,6 +8,12 @@ astro dev --background
 
 Manage the background server with `astro dev stop`, `astro dev status`, and `astro dev logs`.
 
+## Publishing content
+
+**发布**内容到线上——简历、目录条目、调研笔记、每日短片——走 `publish-site`
+skill：它管 build→deploy→verify 的闭环、内容源之间的分工、视频走 GitHub
+Release 的分发方式，以及那些踩过一次就记住的坑。
+
 ## Documentation
 
 Full documentation: https://docs.astro.build
