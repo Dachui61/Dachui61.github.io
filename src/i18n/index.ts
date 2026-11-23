@@ -29,7 +29,7 @@ export function hrefFor(pathname: string, locale: Locale, hash = ''): string {
 type Strings = {
   siteName: string;
   siteTagline: string;
-  nav: { work: string; notes: string; decisions: string; resume: string; about: string };
+  nav: { work: string; notes: string; decisions: string; films: string; resume: string; about: string };
   actions: {
     browseWork: string;
     readNotes: string;
@@ -76,7 +76,7 @@ export const ui: Record<Locale, Strings> = {
   zh: {
     siteName: '刘宇',
     siteTagline: '把一件机器的状态讲清楚',
-    nav: { work: '作品', notes: '调研笔记', decisions: '决策记录', resume: '简历', about: '关于' },
+    nav: { work: '作品', notes: '调研笔记', decisions: '决策记录', films: '短片', resume: '简历', about: '关于' },
     actions: {
       browseWork: '看作品',
       readNotes: '读调研笔记',
@@ -121,7 +121,7 @@ export const ui: Record<Locale, Strings> = {
   en: {
     siteName: 'Yu Liu',
     siteTagline: 'Reading one machine honestly',
-    nav: { work: 'Work', notes: 'Research notes', decisions: 'Decisions', resume: 'Résumé', about: 'About' },
+    nav: { work: 'Work', notes: 'Research notes', decisions: 'Decisions', films: 'Films', resume: 'Résumé', about: 'About' },
     actions: {
       browseWork: 'See the work',
       readNotes: 'Read the notes',

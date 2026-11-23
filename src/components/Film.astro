@@ -1,0 +1,106 @@
+---
+import { render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { ui, type Locale } from '../i18n';
+
+interface Props {
+  entry: import('astro:content').CollectionEntry<'films'>;
+  locale: Locale;
+}
+
+const { entry, locale } = Astro.props;
+const t = ui[locale];
+const d = entry.data;
+
+const { Content } = await render(entry);
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const spec = [
+  d.seconds ? `${d.seconds}s` : null,
+  d.resolution,
+  d.fps ? `${d.fps} fps` : null,
+]
+  .filter(Boolean)
+  .join(' · ');
+
+const dateText = new Intl.DateTimeFormat(locale === 'zh' ? 'zh-CN' : 'en-GB', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  timeZone: 'Asia/Shanghai',
+}).format(d.date);
+---
+
+<Base locale={locale} title={d.title} description={d.oneLiner}>
+  <article class="mx-auto w-full max-w-4xl px-[18px] sm:px-11">
+    <header class="py-14 sm:py-20">
+      <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+        <p class="label">
+          {locale === 'zh' ? '短片' : 'Film'}
+          {d.episode ? ` · 第 ${d.episode} 期` : ''}
+        </p>
+        <p class="label">{dateText}</p>
+      </div>
+
+      <h1
+        class="mt-4 max-w-[22em] text-[2.1rem] leading-[1.14] font-semibold tracking-[-0.038em] sm:text-[2.8rem]"
+      >
+        {d.title}
+      </h1>
+
+      {
+        d.oneLiner && (
+          <p class="mt-5 max-w-[46em] text-[17px] leading-relaxed text-fg-muted lg:text-[19px]">
+            {d.oneLiner}
+          </p>
+        )
+      }
+
+      {
+        spec && (
+          <p class="mt-5 font-mono text-[12px] text-fg-subtle">
+            {spec}
+          </p>
+        )
+      }
+    </header>
+
+    <figure class="overflow-hidden rounded-[var(--radius-card)] border border-line bg-card">
+      <video
+        class="block w-full"
+        controls
+        preload="metadata"
+        poster={`${base}${d.poster}`}
+        playsinline
+        aria-label={d.title}
+      >
+        <source src={`${base}${d.video}`} type="video/mp4" />
+      </video>
+    </figure>
+
+    <div class="prose mt-12 max-w-[68ch] border-t border-line pt-10">
+      <Content />
+    </div>
+  </article>
+</Base>
+
+<script is:inline>
+  // Transcript timestamps seek the player instead of changing the hash.
+  // The media-fragment spec (#t=) only applies to the media URL, not the
+  // document URL, so it is handled here.
+  (function () {
+    var v = document.querySelector('video');
+    if (!v) return;
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('a[href*="#t="]');
+      if (!a) return;
+      var t = Number(a.getAttribute('href').split('#t=')[1]);
+      if (!isFinite(t)) return;
+      e.preventDefault();
+      v.currentTime = t;
+      v.play();
+      v.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  })();
+</script>

@@ -143,4 +143,26 @@ const resume = defineCollection({
   }),
 });
 
-export const collections = { work, resume };
+/** A short film: a rendered video with its narration transcript and sources. */
+const films = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './content/films' }),
+  schema: z.object({
+    slug: z.string(),
+    title: z.string(),
+    date: z.coerce.date(),
+    episode: z.number().optional(),
+    oneLiner: z.string().default(''),
+    seconds: z.coerce.number().optional(),
+    resolution: z.string().optional(),
+    fps: z.number().optional(),
+    audience: z.string().default(''),
+    basis: z.string().default(''),
+    brand: z.string().default(''),
+    style: z.string().default(''),
+    /** Path under /media. */
+    video: z.string(),
+    poster: z.string(),
+  }),
+});
+
+export const collections = { work, resume, films };
