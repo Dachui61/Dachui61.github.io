@@ -22,10 +22,24 @@ set -euo pipefail
 SLUG="${1:?用法: scripts/publish-episode.sh <slug>}"
 SITE_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 WORKSPACE="${WORKSPACE:-$(cd "$SITE_ROOT/.." && pwd)}"
-EPISODES="${EPISODES:-$WORKSPACE/motions/daily-hot-video/episodes}"
+# 默认在 $WORKSPACE/motions 与 ~/Documents/motions 里找 episodes
+if [ -z "${EPISODES:-}" ]; then
+  for CAND in "$WORKSPACE/motions/daily-hot-video/episodes" "$HOME/Documents/motions/daily-hot-video/episodes"; do
+    [ -d "$CAND" ] && EPISODES="$CAND" && break
+  done
+  EPISODES="${EPISODES:-$WORKSPACE/motions/daily-hot-video/episodes}"
+fi
 RELEASE_REPO="${RELEASE_REPO:-Dachui61/daily-hot-video}"
 FF="${FF:-$(command -v ffmpeg || true)}"
+if [ -z "$FF" ]; then
+  FF=$(find "$HOME/.dsh" -type f -name 'ffmpeg-macos-*' 2>/dev/null | head -1)
+fi
 PY="${PY:-python3}"
+if ! "$PY" -c "import PIL" 2>/dev/null; then
+  for CAND in "$HOME/.dsh/dsh-runtimes/dsh-primary-runtime/dependencies/python/bin/python3" python3; do
+    [ -x "$CAND" ] && "$CAND" -c "import PIL" 2>/dev/null && PY="$CAND" && break
+  done
+fi
 
 EP="$EPISODES/$SLUG"
 MASTER="$EP/out/final.mp4"
